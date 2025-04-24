@@ -1,0 +1,27 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Dossiers de dépendances (si jamais tu utilises Composer ou Node.js plus tard)
+vendor/
+node_modules/
+
+# Fichiers sensibles
+config.php
+.env
+
+# Logs
+*.log
+
+# Cache
+*.cache
+*.tmp
+
+# IDE / éditeurs
+.vscode/
+.idea/
+
+# Sauvegardes
+*.bak
+*.old
+*.swp
