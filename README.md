@@ -1,12 +1,13 @@
-# boulangerie-
+ Boulangerie
 
-# 🥖 Projet Boulangerie
+ 🥖 Projet Boulangerie
 
-Site web dynamique de gestion pour une ou plusieurs boulangeries. Projet réalisé dans le cadre de ma formation en développement informatique.
+Site web dynamique de gestion pour une  boulangerie qui veut s'orienter vers la livraison à domicile. 
+Projet réalisé dans le cadre de ma formation en développement informatique.
 
----
 
-## 🚀 Fonctionnalités principales
+
+ 🚀 Fonctionnalités principales
 
 - 🔎 Affichage des produits par catégories
 - 🍰 Vue toutes boulangeries confondues ou par boulangerie sélectionnée
@@ -19,20 +20,12 @@ Site web dynamique de gestion pour une ou plusieurs boulangeries. Projet réalis
 - 📊 Espace "Mon espace" avec tableau de bord
 - 🕘 Historique des actions client
 
----
-
-## 🧰 Technologies utilisées
-
-- **Langage serveur** : PHP (PDO)
+🧰 Technologies utilisées
+Fonctionnalités:
+- **Langage serveur** : PHP
 - **Base de données** : MySQL
-- **Structure** : Architecture MVC simplifiée
-- **Gestion du projet** : Git & GitHub
-
----
-
-## ⚙️ Installation
-
-1. Clone le projet :
-```bash
-git clone https://github.com/ton-utilisateur/nom-du-depot.git
+UX/UI:
+HTML/CSS
+JS
+- **Gestion du projet** :  GitHub
 
