@@ -15,4 +15,4 @@ if (!isset($_SESSION['client_id'])) {
 </p>
 
 <h2>Bienvenue sur votre espace client ! 🎉</h2>
-<p><a href="deconnexion.php">Se déconnecter</a></p>
+<p><a href="connexion.php">Se connecter</a></p>
