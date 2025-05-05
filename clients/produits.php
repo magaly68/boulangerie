@@ -24,8 +24,7 @@ if (!empty($favoris)) {
         JOIN categories c ON p.categorie_id = c.id
         JOIN boulangeries b ON p.boulangerie_id = b.id
         WHERE p.boulangerie_id IN ($placeholders)
-        ORDER BY c.nom
-    ";
+        ORDER BY c.nom";
     $stmt = $pdo->prepare($query);
     $stmt->execute($favoris);
 } else {
@@ -34,8 +33,7 @@ if (!empty($favoris)) {
         FROM produits p
         JOIN categories c ON p.categorie_id = c.id
         JOIN boulangeries b ON p.boulangerie_id = b.id
-        ORDER BY c.nom
-    ";
+        ORDER BY c.nom";
     $stmt = $pdo->query($query);
 }
 
@@ -50,16 +48,24 @@ foreach ($produits as $p) {
 
 <h2>Nos produits <?php if ($client_id && $favoris) echo "dans vos boulangeries favorites"; ?></h2>
 
-<?php foreach ($par_categorie as $categorie => $liste): ?>
+<?php 
+foreach ($par_categorie as $categorie => $liste) { 
+?>
     <h3><?= htmlspecialchars($categorie) ?></h3>
     <ul>
-        <?php foreach ($liste as $p): ?>
+        <?php 
+        foreach ($liste as $p) { 
+        ?>
             <li>
                 <strong><?= htmlspecialchars($p['libelle']) ?></strong> - <?= htmlspecialchars($p['prix']) ?> €  
                 <em>(<?= htmlspecialchars($p['boulangerie_nom']) ?>)</em><br>
                 <?= htmlspecialchars($p['description']) ?><br>
                 <small>Mise à jour le <?= htmlspecialchars($p['updated_at']) ?></small>
             </li>
-        <?php endforeach; ?>
-    </ul>
-<?php endforeach; ?>
+        <?php 
+        } 
+        ?>
+        </ul> 
+    <?php 
+    } 
+    ?>

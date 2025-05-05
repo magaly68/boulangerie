@@ -48,6 +48,10 @@ $client_id = $_SESSION['client_id'] ?? null;
 
 <h2>Mon Espace</h2>
 
+<ul>
+    <li><a href="modifier_client.php">Modifier mes informations</a></li>
+   
+</ul>
 <p>
     <strong>Email :</strong> 
     <?= htmlspecialchars($client['email']) 
@@ -67,44 +71,74 @@ $client_id = $_SESSION['client_id'] ?? null;
 
 <h3>⭐ Mes boulangeries favorites</h3>
 <ul>
-    <?php if (empty($favoris)): ?>
+    <?php 
+        if (empty($favoris)): ?>
         <li>Aucune pour le moment.</li>
-    <?php else: ?>
-        <?php foreach ($favoris as $b): ?>
-            <li><?= htmlspecialchars($b['nom']) ?></li>
-        <?php endforeach; ?>
-    <?php endif; ?>
+    <?php 
+        else: 
+            foreach ($favoris as $b): ?>
+                <li><?= htmlspecialchars($b['nom']) ?></li>
+            <?php 
+            endforeach; 
+        endif;
+    ?>
 </ul>
 
-<hr>
 
+<hr>
+<?php
+$stmt = $pdo->prepare("
+    SELECT b.id, b.nom, b.ville 
+    FROM favoris f 
+    JOIN boulangeries b ON f.boulangerie_id = b.id 
+    WHERE f.client_id = ?
+");
+$stmt->execute([$_SESSION['client_id']]);
+$favorites = $stmt->fetchAll();
+
+if ($favorites):
+?>
+    <ul>
+    <?php foreach ($favorites as $boulangerie): ?>
+        <li>
+            <?= htmlspecialchars($boulangerie['nom']) ?> (<?= htmlspecialchars($boulangerie['ville']) ?>)
+            - <a href="voir_boulangerie.php?id=<?= $boulangerie['id'] ?>">Voir la boulangerie</a>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <p>Aucune boulangerie en favori pour le moment.</p>
+<?php endif; ?>
 <h3>🍞 Produits de mes boulangeries favorites</h3>
 <ul>
     <?php 
-    if (empty($produits)) { ?>
+    if (empty($produits)) { 
+        ?>
         <li>Aucun produit trouvé.</li>
     <?php 
     } else {
-        foreach ($produits as $p) { ?>
+        foreach ($produits as $p) { 
+        ?>
         <li>
             <strong><?= htmlspecialchars($p['libelle']) ?></strong> 
              <?= htmlspecialchars($p['prix']) 
              ?> €<br/>
             <em>
                 <?= htmlspecialchars($p['boulangerie']) 
-                ?>
+            ?>
             </em>
             <br/>
             <?= htmlspecialchars($p['description']) 
             ?>
         </li>
-        <?php 
-        }
-    }
+    <?php 
+    } 
+    } 
     ?>
+</ul>
+
 <h3>🕒 Historique des actions</h3>
 
-<!--historique -->
 <?php
 $stmt = $pdo->prepare("SELECT action, date_action FROM historique_actions WHERE client_id = ? ORDER BY date_action DESC LIMIT 10");
 $stmt->execute([$client_id]);
@@ -113,97 +147,88 @@ $actions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <ul>
 <?php 
-if (empty($actions)) { ?>
+if (empty($actions)) { 
+    ?>
     <li>Aucune action enregistrée.</li>
 <?php 
 } else {
-    foreach ($actions as $a) {
-         ?>
+    foreach ($actions as $a) { 
+        ?>
         <li>
             <?= htmlspecialchars($a['action']) ?> <br>
-            <small>
-                <?= $a['date_action'] ?>
-            </small>
-        </li>
-    <?php 
-    } 
-?>
-
-
-<ul>
-<?php 
-if (empty($actions)): ?>
-    <li>Aucune action enregistrée.</li>
-<?php 
-else: 
-    foreach ($actions as $a): ?>
-        <li>
-            <?= htmlspecialchars($a['action']) ?> <br>
-            <small><?= $a['date_action'] ?></small>
-        </li>
-    <?php 
-    endforeach; 
-endif; 
-?>
-</ul>
-<h3>🛠️ Historique des actions</h3>
-
-<?php
-$stmt = $pdo->prepare("SELECT action, date_action FROM historique_gestionnaire WHERE gestionnaire_id = ? ORDER BY date_action DESC LIMIT 10");
-$stmt->execute([$_SESSION['gestionnaire_id']]);
-$actions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<ul>
-<?php 
-if (empty($actions)): ?>
-    <li>Aucune action enregistrée.</li>
-<?php 
-else: 
-    foreach ($actions as $a): ?>
-        <li><?= htmlspecialchars($a['action']) ?> <br><small><?= $a['date_action'] ?></small></li>
-    <?php endforeach; 
-endif; ?>
-</ul>
-
-<h3>🕒 Historique des actions</h3>
-
-<?php
-$stmt = $pdo->prepare("SELECT action, date_action FROM historique_gestionnaire WHERE gestionnaire_id = ? ORDER BY date_action DESC LIMIT 10");
-$stmt->execute([$_SESSION['gestionnaire_id']]);
-$actions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<ul>
-<?php 
-    if (empty($actions)) 
-    {
- ?>
-    <li>Aucune action enregistrée.</li>
-<?php 
-    } else { 
-?>
-    <?php 
-    foreach ($actions as $a) { ?>
-        <li>
-            <?= htmlspecialchars($a['action']) ?><br>
-            <small><?= $a['date_action'] ?></small>
+            <small><?= htmlspecialchars($a['date_action']) ?></small>
         </li>
     <?php 
     } 
 } 
 ?>
-    <?php 
-        if (empty($actions)): ?>
-        <li>Aucune action enregistrée.</li>
-    <?php 
-        else: 
-            foreach ($actions as $a): ?>
+</ul>
+
+<?php
+// Récupérer les produits par catégorie pour cette boulangerie
+$stmtCat = $pdo->prepare("SELECT id, nom FROM categories");
+$stmtCat->execute();
+$categories = $stmtCat->fetchAll();
+
+foreach ($categories as $cat):
+    $stmtProd = $pdo->prepare("
+        SELECT libelle, poids, photo, prix, description 
+        FROM produits 
+        WHERE categorie_id = ? AND boulangerie_id = ?
+    ");
+    $stmtProd->execute([$cat['id'], $boulangerie['id']]);
+    $produits = $stmtProd->fetchAll();
+
+    if ($produits):
+?>
+    <h4>Catégorie : <?= htmlspecialchars($cat['nom']) ?></h4>
+    <ul>
+    <?php foreach ($produits as $prod): ?>
         <li>
-            <?= htmlspecialchars($a['action']) ?><br>
-            <small><?= $a['date_action'] ?></small>
+            <strong><?= htmlspecialchars($prod['libelle']) ?></strong> - <?= htmlspecialchars($prod['poids']) ?>g - <?= number_format($prod['prix'], 2) ?>€
+            <br>
+            <?= !empty($prod['description']) ? htmlspecialchars($prod['description']) : '' ?>
         </li>
-    <?php 
-            endforeach; 
-        endif; 
-    ?>
+    <?php endforeach; ?>
+    </ul>
+<?php
+    endif;
+endforeach;
+?>
+
+<?php
+// Récupérer les produits par catégorie pour cette boulangerie
+$stmtCat = $pdo->prepare("SELECT id, nom FROM categories");
+$stmtCat->execute();
+$categories = $stmtCat->fetchAll();
+
+foreach ($categories as $cat):
+    $stmtProd = $pdo->prepare("
+        SELECT id, libelle, poids, photo, prix, description 
+        FROM produits 
+        WHERE categorie_id = ? AND boulangerie_id = ?
+    ");
+    $stmtProd->execute([$cat['id'], $boulangerie['id']]);
+    $produits = $stmtProd->fetchAll();
+
+    if ($produits):
+?>
+    <h4>Catégorie : <?= htmlspecialchars($cat['nom']) ?></h4>
+    <ul>
+    <?php foreach ($produits as $prod): ?>
+        <li>
+            <strong><?= htmlspecialchars($prod['libelle']) ?></strong> - <?= htmlspecialchars($prod['poids']) ?>g - <?= number_format($prod['prix'], 2) ?>€
+            <br>
+            <?= !empty($prod['description']) ? htmlspecialchars($prod['description']) : '' ?>
+            <br>
+            <?php if (!empty($prod['photo'])): ?>
+                <img src="uploads/<?= htmlspecialchars($prod['photo']) ?>" alt="<?= htmlspecialchars($prod['libelle']) ?>" style="width: 100px; height: auto; margin-top: 5px;">
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+<?php
+    endif;
+endforeach;
+?>
+

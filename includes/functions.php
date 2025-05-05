@@ -1,26 +1,52 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+// ==================== Connexion utilisateur ====================
+function loginClient($pdo, $email, $password) { 
+    
+ }
+
+function isClient() { 
+
+ }
+
+function isGestionnaire() { 
+
+ }
+
+// ==================== Produits ====================
+function getProduitsByCategorie($pdo, $categorie_id) { 
+
+ }
+
+function getProduitsByBoulangerie($pdo, $boulangerie_id) { 
+
+}
+
+// ==================== Favoris ====================
+function ajouterFavori($pdo, $client_id, $boulangerie_id) { 
+
+}
+
+function supprimerFavori($pdo, $client_id, $boulangerie_id) { 
+
+}
+
+function getFavorisClient($pdo, $client_id) { 
+ $stmt = $pdo->prepare("SELECT b.id, b.nom FROM favoris f 
+                           JOIN boulangeries b ON f.boulangerie_id = b.id
+                           WHERE f.client_id = ?");
+    $stmt->execute([$client_id]);
+    return $stmt->fetchAll();
+
+}
+
+// ==================== Historique ====================
+function enregistrerAction($pdo, $user_id, $action) { 
+
+ }
+
+function getHistoriqueClient($pdo, $client_id) { 
+    $stmt = $pdo->prepare("SELECT * FROM historique WHERE utilisateur_id = ? ORDER BY date_action DESC LIMIT 20");
+    $stmt->execute([$client_id]);
+    return $stmt->fetchAll(); 
 }
 
 
-function enregistrer_action(PDO $pdo, int $client_id, string $action) {
-    $stmt = $pdo->prepare("INSERT INTO historique_actions (client_id, action) VALUES (?, ?)");
-    $stmt->execute([$client_id, $action]);
-}
-
-function enregistrer_action_gestionnaire(PDO $pdo, int $gestionnaire_id, string $action) {
-    $stmt = $pdo->prepare("INSERT INTO historique_gestionnaire (gestionnaire_id, action) VALUES (?, ?)");
-    $stmt->execute([$gestionnaire_id, $action]);
-}
-
-function isClientLoggedIn(): bool {
-    return isset($_SESSION['client_id']);
-}
-
-function isGestionnaireLoggedIn(): bool {
-    return isset($_SESSION['gestionnaire_id']);
-}
-
-function ajouterFavori(PDO $pdo, int $client_id, int $boulangerie_id) { ... }
-function supprimerFavori(PDO $pdo, int $client_id, int $boulangerie_id) { ... }

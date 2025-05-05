@@ -23,20 +23,30 @@ $boulangeries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <h2>Liste des boulangeries</h2>
 
 <ul>
-<?php foreach ($boulangeries as $b): ?>
+<?php 
+    foreach ($boulangeries as $b) {
+?>
     <li>
         <?= htmlspecialchars($b['nom']) ?>
-        <?php if (in_array($b['id'], $favoris)): ?>
+        <?php 
+        if (in_array($b['id'], $favoris)) {
+        ?>
             <form action="retirer_favori.php" method="post" style="display:inline;">
                 <input type="hidden" name="boulangerie_id" value="<?= $b['id'] ?>">
                 <button type="submit">Retirer des favoris</button>
             </form>
-        <?php else: ?>
+        <?php 
+        } else {
+        ?>
             <form action="ajouter_favori.php" method="post" style="display:inline;">
                 <input type="hidden" name="boulangerie_id" value="<?= $b['id'] ?>">
                 <button type="submit">Ajouter aux favoris</button>
             </form>
-        <?php endif; ?>
+        <?php 
+        }
+        ?>
     </li>
-<?php endforeach; ?>
+<?php 
+    }
+?>
 </ul>

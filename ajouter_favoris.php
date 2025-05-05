@@ -28,3 +28,4 @@ if ($boulangerie_id) {
 }
 
 header('Location: liste_boulangeries.php');
+exit;
