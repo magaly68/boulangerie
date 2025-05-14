@@ -1,52 +1,21 @@
-// ==================== Connexion utilisateur ====================
-function loginClient($pdo, $email, $password) { 
-    
- }
-
-function isClient() { 
-
- }
-
-function isGestionnaire() { 
-
- }
-
-// ==================== Produits ====================
-function getProduitsByCategorie($pdo, $categorie_id) { 
-
- }
-
-function getProduitsByBoulangerie($pdo, $boulangerie_id) { 
-
+<?php
+// Démarrage de la session (si ce n'est pas déjà fait)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-// ==================== Favoris ====================
-function ajouterFavori($pdo, $client_id, $boulangerie_id) { 
+// Chargement de la configuration (connexion à la base de données)
+require_once __DIR__ . '/db.php';
 
-}
+// Inclusion des fichiers de fonctions organisés par fonctionnalité
+require_once __DIR__ . '/functions/utilisateurs.php';
+require_once __DIR__ . '/functions/produits.php';
+require_once __DIR__ . '/functions/categories.php';
+require_once __DIR__ . '/functions/boulangeries.php';
+require_once __DIR__ . '/functions/favoris.php';
+require_once __DIR__ . '/functions/historique.php';
+require_once __DIR__ . '/functions/commandes.php';
+// Ajoute ici les nouveaux fichiers au fur et à mesure si besoin
 
-function supprimerFavori($pdo, $client_id, $boulangerie_id) { 
-
-}
-
-function getFavorisClient($pdo, $client_id) { 
- $stmt = $pdo->prepare("SELECT b.id, b.nom FROM favoris f 
-                           JOIN boulangeries b ON f.boulangerie_id = b.id
-                           WHERE f.client_id = ?");
-    $stmt->execute([$client_id]);
-    return $stmt->fetchAll();
-
-}
-
-// ==================== Historique ====================
-function enregistrerAction($pdo, $user_id, $action) { 
-
- }
-
-function getHistoriqueClient($pdo, $client_id) { 
-    $stmt = $pdo->prepare("SELECT * FROM historique WHERE utilisateur_id = ? ORDER BY date_action DESC LIMIT 20");
-    $stmt->execute([$client_id]);
-    return $stmt->fetchAll(); 
-}
-
-
+// (Facultatif) Configuration de la timezone
+date_default_timezone_set('Europe/Paris');

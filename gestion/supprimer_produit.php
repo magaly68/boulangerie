@@ -1,12 +1,14 @@
 <?php
 session_start();
 require_once 'config/database.php';
+require_once 'utils/gestionnaire_actions.php'; 
 
 if (!isset($_SESSION['gestionnaire_id'])) {
     header("Location: connexion.php");
     exit;
+}
 
-    $pdo = getPDO();
+$pdo = getPDO();
 $boulangerie_id = $_SESSION['boulangerie_id'];
 $produit_id = $_GET['id'] ?? null;
 
@@ -15,10 +17,15 @@ if (!$produit_id) {
     exit;
 }
 
+$stmt = $pdo->prepare("SELECT * FROM produits WHERE id = ? AND boulangerie_id = ?");
+$stmt->execute([$produit_id, $boulangerie_id]);
+$produit = $stmt->fetch();
+
 if (!$produit) {
     echo "Produit introuvable ou non autorisé.";
     exit;
 }
+
 
 // Supprimer la photo du serveur si elle existe
 if ($produit['photo']) {
@@ -28,13 +35,13 @@ if ($produit['photo']) {
     }
 }
 
+function enregistrer_action_gestionnaire($pdo, $_SESSION['gestionnaire_id'], "A supprimé le produit \"{$produit['nom']}\"") {
+    $id = $_GET['id'];
+    $stmt = $pdo->prepare("INSERT INTO produits WHERE id = ?");
+    $stmt->execute([$id]);
+}
 
-$id = $_GET['id'];
-$stmt = $pdo->prepare("DELETE FROM produits WHERE id = ?");
-$stmt->execute([$id]);
-$produit = $stmt->fetch();
+
 
 header("Location: liste_produits.php?succes=deleted");
 exit;
-
-enregistrer_action_gestionnaire($pdo, $_SESSION['gestionnaire_id'], "A ajouté le produit \"$nomProduit\"");

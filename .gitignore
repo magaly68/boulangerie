@@ -25,3 +25,6 @@ config.php
 *.bak
 *.old
 *.swp
+
+.idea/
+
