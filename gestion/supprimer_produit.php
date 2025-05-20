@@ -35,11 +35,17 @@ if ($produit['photo']) {
     }
 }
 
-function enregistrer_action_gestionnaire($pdo, $_SESSION['gestionnaire_id'], "A supprimé le produit \"{$produit['nom']}\"") {
-    $id = $_GET['id'];
-    $stmt = $pdo->prepare("INSERT INTO produits WHERE id = ?");
-    $stmt->execute([$id]);
+function enregistrer_action_gestionnaire($pdo, $gestionnaire_id, $action) {
+    $stmt = $pdo->prepare("INSERT INTO gestionnaire_actions (gestionnaire_id, action, date_action) VALUES (?, ?, NOW())");
+    $stmt->execute([$gestionnaire_id, $action]);
 }
+
+// Enregistrer l'action du gestionnaire
+enregistrer_action_gestionnaire(
+    $pdo,
+    $_SESSION['gestionnaire_id'],
+    "A supprimé le produit \"{$produit['nom']}\""
+);
 
 
 

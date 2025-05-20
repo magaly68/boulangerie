@@ -4,15 +4,15 @@ require_once '../includes/functions_favoris.php';
 require_once '../includes/functions_boulangeries.php';
 session_start();
 
-;
 
-if (!isset($_GET['id']) {
+
+if (!isset($_GET['id'])) {
     echo "Aucune boulangerie sélectionnée.";
     exit;
 }
 
-$id_boulangerie = (int)$_GET['id']);
-$client_id = $_SESSION['client']['id'] ?? null
+$boulangerie_id = (int)$_GET['id'];
+$client_id = $_SESSION['client']['id'] ?? null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_favori']) && $client_id) {
     if ($_POST['action_favori'] === 'ajouter') {
@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_favori']) && $
     exit;
 }
 
-$boulangerie = getBoulangerieById($pdo, $boulangerie_id);
 $est_favori = false;
 
 
@@ -54,6 +53,11 @@ if (!$boulangerie) {
 
 
 // Vérification de l'ID passé en GET
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    header('Location: index.php');
+    exit();
+}
+// Connexion à la base de données
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header('Location: index.php');
     exit();
