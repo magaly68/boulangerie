@@ -39,7 +39,7 @@ if (function_exists('enregistrer_action')) {
     error_log("Function 'enregistrer_action' is not defined.");
 }
 enregistrer_action($pdo, $_SESSION['client_id'], "A supprimé la boulangerie \"$nomBoulangerie\" des favoris");
-header('Location: ../mon_espace.php');
+header('mon_espace.php');
 exit;
 
 ?>

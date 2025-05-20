@@ -43,10 +43,18 @@ if (!$boulangerie) {
 ?>
 
 <h1><?= htmlspecialchars($boulangerie['nom']) ?></h1>
-<p><strong>Adresse :</strong> <?= htmlspecialchars($boulangerie['adresse']) ?></p>
-<p><strong>Description :</strong> <?= nl2br(htmlspecialchars($boulangerie['description'])) ?></p>
-<p><strong>Horaires :</strong> <?= htmlspecialchars($boulangerie['horaires']) ?></p>
-<p><strong>Téléphone :</strong> <?= htmlspecialchars($boulangerie['telephone']) ?></p>
+<p>
+    <strong>Adresse :</strong><?= htmlspecialchars($boulangerie['adresse']) ?>
+</p>
+<p>
+    <strong>Description :</strong><?= nl2br(htmlspecialchars($boulangerie['description'])) ?>
+</p>
+<p>
+    <strong>Horaires :</strong><?= htmlspecialchars($boulangerie['horaires']) ?>
+</p>
+<p>
+    <strong>Téléphone :</strong><?= htmlspecialchars($boulangerie['telephone']) ?>
+</p>
 
 
 
@@ -78,8 +86,7 @@ if (!$boulangerie) {
 <h2>Catégories disponibles</h2>
 <ul>
 <?php
-$query = "
-    SELECT DISTINCT c.id, c.nom
+$query = "SELECT DISTINCT c.id, c.nom
     FROM categories c
     INNER JOIN produits p ON p.categorie_id = c.id
     WHERE p.boulangerie_id = ?
@@ -141,8 +148,12 @@ foreach ($categories as $cat) {
 
 
 <h1><?= htmlspecialchars($boulangerie['nom']) ?></h1>
-<p><strong>Adresse :</strong> <?= htmlspecialchars($boulangerie['adresse']) ?></p>
-<p><strong>Description :</strong> <?= htmlspecialchars($boulangerie['description']) ?></p>
+<p>
+    <strong>Adresse :</strong> <?= htmlspecialchars($boulangerie['adresse']) ?>
+</p>
+<p>
+    <strong>Description :</strong> <?= htmlspecialchars($boulangerie['description']) ?>
+</p>
 
 <?php 
 foreach ($produits_par_categorie as $categorie => $produits): 
@@ -164,7 +175,7 @@ foreach ($produits_par_categorie as $categorie => $produits):
         ?>
         </ul>
     <?php 
-    else: 
+    else:
     ?>
         <p>Aucun produit dans cette catégorie.</p>
     <?php 
@@ -175,7 +186,7 @@ foreach ($produits_par_categorie as $categorie => $produits):
     ?>
 
 <?php
-if ($client_id):
+    if ($client_id):
     ?>
     <form method="post" action="voir_boulangerie.php?id=<?= $boulangerie_id ?>">
         <input type="hidden" name="action_favori" value="<?= $est_favori ? 'retirer' : 'ajouter' ?>">

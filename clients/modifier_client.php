@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$hash, $client_id]);
         }
 
-        enregistrer_action($client_id, "Modification des informations du client");
+        enregistrer_action($client_id, "Modification des informations du client", null);
         $message = "Informations mises à jour avec succès.";
     }
 }
