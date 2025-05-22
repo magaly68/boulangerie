@@ -45,7 +45,7 @@ $stmt->execute([$client_id]);
 $actions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,18 +110,23 @@ $actions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
+    <header class="dashboard-header">
+        <h1>Mon Espace</h1>
+
+        
+    </header>
 <nav aria-label="Tableau de bord" class="dashboard-nav">
     <ul>
-        <li><a href="#infos" accesskey="i">Mes infos</a></li>
-        <li><a href="#favoris" accesskey="f">Favoris</a></li>
-        <li><a href="#produits" accesskey="p">Produits</a></li>
-        <li><a href="#historique" accesskey="h">Historique</a></li>
+        <li><a href="#infos" accesskey="i" target="_blank">Mes infos</a></li>
+        <li><a href="#favoris" accesskey="f" target="_blank">Favoris</a></li>
+        <li><a href="#produits" accesskey="p" target="_blank">Produits</a></li>
+        <li><a href="#historique" accesskey="h" target="_blank">Historique</a></li>
     </ul>
 </nav>
 <main class="dashboard-main" tabindex="-1">
     <h2 id="infos">Mon Espace</h2>
     <ul>
-        <li><a href="modifier_client.php">Modifier mes informations</a></li>
+        <li><a href="modifier_client.php" target="_blank">Modifier mes informations</a></li>
     </ul>
     <p>
         <strong>Email :</strong>
